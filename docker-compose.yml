@@ -1,0 +1,42 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eBackOffice
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+    depends_on:
+      - db
+
+
+  db:
+    image: postgres:15
+    container_name: postgressql15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: DbeBackOffice
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - dbpgrdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgAdmin
+    restart: always
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: isala@finactu.com 
+      PGADMIN_DEFAULT_PASSWORD: admin
+
+volumes:
+  dbpgrdata:
